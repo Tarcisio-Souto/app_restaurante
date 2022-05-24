@@ -13,7 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('registers', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->float('opening_balance');
+            $table->float('ending_balance');
+            $table->date('register_date');
+            $table->time('opening_time');
+            $table->time('ending_time');
+        });
     }
 
     /**
@@ -23,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('registers');
     }
 };

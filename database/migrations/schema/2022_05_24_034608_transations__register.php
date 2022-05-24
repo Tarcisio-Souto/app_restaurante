@@ -13,16 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('administrators', function (Blueprint $table) {
+        Schema::create('transations_register', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('name');            
-            $table->string('cpf');
-            $table->string('phone_number');
-            $table->string('email');
-            $table->unsignedBigInteger('fk_address');
+            $table->unsignedBigInteger('fk_register');
+            $table->float('input_value');
+            $table->float('output_value');
+            $table->date('dt_transations');
 
-            $table->foreign('fk_address')->references('id')->on('addresses');
+            $table->foreign('fk_register')->references('id')->on('registers');
 
         });
     }
@@ -34,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('administrators');
+        Schema::dropIfExists('transations_register');
     }
 };

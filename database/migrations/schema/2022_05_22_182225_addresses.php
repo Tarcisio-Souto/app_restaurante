@@ -13,7 +13,20 @@ return new class extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('addresses', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->string('street');
+            $table->string('number');
+            $table->string('district');
+            $table->string('city');
+            $table->string('zipcode');
+            $table->unsignedBigInteger('fk_state');
+
+            $table->foreign('fk_state')->references('id')->on('states');
+
+
+        });
     }
 
     /**
@@ -23,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('addresses');
     }
 };

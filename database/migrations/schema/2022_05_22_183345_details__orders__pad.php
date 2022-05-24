@@ -13,7 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('details_orders_pad', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->unsignedBigInteger('fk_order_pad');
+            $table->unsignedBigInteger('fk_product');
+            $table->integer('amount');
+
+            $table->foreign('fk_order_pad')->references('id')->on('orders_pad');
+            $table->foreign('fk_product')->references('id')->on('products');
+
+        });
     }
 
     /**
@@ -23,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('details_orders_pad');
     }
 };

@@ -13,7 +13,18 @@ return new class extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('waiters', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->string('name');            
+            $table->string('cpf');
+            $table->string('phone_number');
+            $table->string('email');
+            $table->unsignedBigInteger('fk_address');
+
+            $table->foreign('fk_address')->references('id')->on('addresses');
+
+        });
     }
 
     /**
@@ -23,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('waiters');
     }
 };
