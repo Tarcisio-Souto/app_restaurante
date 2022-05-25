@@ -9,4 +9,6 @@ Route::get('/home', [WaitersController::class, 'index'])->name('home');
 
 
 Route::get('/products', [ProductsController::class, 'index'])->name('products.list');
-Route::get('/products/edit/{id}', [ProductsController::class, 'edit'])->name('products.edit');
+Route::get('/product/edit/{id}', [ProductsController::class, 'edit'])->name('product.edit');
+Route::post('/product/update/{id}', [ProductsController::class, 'update'])->name('product.update');
+

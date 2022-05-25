@@ -18,7 +18,7 @@
             <td>{{ product.description }}</td>
             <td>{{ product.price }}</td>
             <td align="center">
-              <Link :href="'/products/edit/' + product.id"
+              <Link :href="'/product/edit/' + product.id"
                 ><i class="fas fa-edit"></i
               ></Link>              
               <span
@@ -76,7 +76,7 @@ export default {
         closeButton: false,
         size: "large",
         title:
-          "<img src='https://img2.gratispng.com/20180421/ibq/kisspng-logo-restaurant-brand-cafe-logo-5adbe8f6b11676.8708671915243614627254.jpg'>",
+          "<h3>Restaurante</h3>",
         message:
           "<i class='fas fa-exclamation-circle' style='color:red'></i></i>&nbsp&nbsp" +
           "<span style='font-weight:bold; position: relative; top: 5px;'>Deletar usuário?</span>",

@@ -4647,6 +4647,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -4684,7 +4691,7 @@ __webpack_require__.r(__webpack_exports__);
             backdrop: true,
             closeButton: false,
             size: "large",
-            title: "<img src='https://img2.gratispng.com/20180421/ibq/kisspng-logo-restaurant-brand-cafe-logo-5adbe8f6b11676.8708671915243614627254.jpg'>",
+            title: "<h3>Restaurante</h3>",
             message: "<i class='fas fa-check-circle' style='color:green'></i>&nbsp&nbsp" + "<span style='font-weight:bold; position: relative; top: 5px;'>Cadastro atualizado com sucesso!</span>"
           });
         }
@@ -4784,7 +4791,7 @@ __webpack_require__.r(__webpack_exports__);
         backdrop: true,
         closeButton: false,
         size: "large",
-        title: "<img src='https://img2.gratispng.com/20180421/ibq/kisspng-logo-restaurant-brand-cafe-logo-5adbe8f6b11676.8708671915243614627254.jpg'>",
+        title: "<h3>Restaurante</h3>",
         message: "<i class='fas fa-exclamation-circle' style='color:red'></i></i>&nbsp&nbsp" + "<span style='font-weight:bold; position: relative; top: 5px;'>Deletar usuário?</span>",
         buttons: {
           cancel: {
@@ -29633,6 +29640,27 @@ var render = function () {
               _c("div", { staticClass: "col-md-3" }),
             ]),
             _vm._v(" "),
+            _vm._l(_vm.errors, function (erro, price) {
+              return _c("div", { key: price, attrs: { align: "center" } }, [
+                price == "price"
+                  ? _c("div", [
+                      erro != ""
+                        ? _c(
+                            "span",
+                            { staticClass: "errors-label-notification" },
+                            [
+                              _c("i", {
+                                staticClass: "fas fa-exclamation-circle",
+                              }),
+                              _vm._v(_vm._s(erro) + "\n            "),
+                            ]
+                          )
+                        : _vm._e(),
+                    ])
+                  : _vm._e(),
+              ])
+            }),
+            _vm._v(" "),
             _c("br"),
             _vm._v(" "),
             _c("div", { staticClass: "row" }, [
@@ -29657,7 +29685,8 @@ var render = function () {
             ]),
             _vm._v(" "),
             _c("br"),
-          ]
+          ],
+          2
         ),
       ]),
       _vm._v(" "),
@@ -29746,7 +29775,7 @@ var render = function () {
                     [
                       _c(
                         "Link",
-                        { attrs: { href: "/products/edit/" + product.id } },
+                        { attrs: { href: "/product/edit/" + product.id } },
                         [_c("i", { staticClass: "fas fa-edit" })]
                       ),
                       _vm._v(" "),

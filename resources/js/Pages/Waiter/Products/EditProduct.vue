@@ -71,6 +71,13 @@
             </div>
             <div class="col-md-3"></div>
           </div>
+          <div v-for="(erro, price) in errors" :key="price" align="center">
+            <div v-if="price == 'price'">
+              <span v-if="erro != ''" class="errors-label-notification">
+                <i class="fas fa-exclamation-circle"></i>{{ erro }}
+              </span>
+            </div>
+          </div>
           <br />
 
           <div class="row">
@@ -141,8 +148,7 @@ export default {
             backdrop: true,
             closeButton: false,
             size: "large",
-            title:
-              "<img src='https://img2.gratispng.com/20180421/ibq/kisspng-logo-restaurant-brand-cafe-logo-5adbe8f6b11676.8708671915243614627254.jpg'>",
+            title: "<h3>Restaurante</h3>",
             message:
               "<i class='fas fa-check-circle' style='color:green'></i>&nbsp&nbsp" +
               "<span style='font-weight:bold; position: relative; top: 5px;'>Cadastro atualizado com sucesso!</span>",

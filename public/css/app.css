@@ -795,3 +795,15 @@ a {
 .btnCadastrar {
     width: 100%;
 }
+
+.errors-label-notification {
+    font-size: 12px;
+    color: rgb(241, 62, 62);
+    font-weight: bold;
+}
+
+.errors-label-notification i {
+    position: relative;
+    margin-right: 5px;
+    top: 0;
+}
