@@ -16,14 +16,8 @@
                 <span class="nav_logo-name">Restaurante</span>
               </a>
               <div class="nav_list">
-                <a href="#" class="nav_link">
-                  <i class="bx bx-table nav_logo-icon"></i>
-                  <span class="nav_logo-name">Mesas</span>
-                </a>
-                <a href="#" class="nav_link">
-                  <i class="bx bxs-food-menu nav_icon"></i>
-                  <span class="nav_name">Produtos</span>
-                </a>                
+                <Link href="/tables" class="nav_link"><i class="bx bx-table nav_logo-icon"></i>Mesas</Link>
+                <Link href="/products" class="nav_link"><i class="bx bxs-food-menu nav_icon"></i>Produtos</Link>
               </div>
             </div>
             <a href="#" class="nav_link">
@@ -33,8 +27,10 @@
           </nav>
         </div>
         <!--Container Main start-->
-        <div class="height-100 bg-light">
-          <h4>Main Components</h4>
+        <div class="content">
+          <article>
+            <slot />
+          </article>
         </div>
         <!--Container Main end-->
       </body>
