@@ -28,7 +28,7 @@
     <!-- Bootbox JS -->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.5.2/bootbox.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.5.2/bootbox.js"></script>
+    <script src="https://cdnjs.cloudlare.com/ajax/libs/bootbox.js/5.5.2/bootbox.js"></script>
 
 
   </head>

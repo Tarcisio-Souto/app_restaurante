@@ -807,3 +807,135 @@ a {
     margin-right: 5px;
     top: 0;
 }
+
+.arrow_down1 {
+    position: relative;
+    margin-right: 10px;
+    cursor: pointer;
+    background-color: rgb(183, 193, 194);
+    width: 25px;
+    border-radius: 100%;
+    text-align: center;
+    top: -2px;
+}
+
+.arrow_down1:hover {
+    opacity: 40%;
+}
+
+.arrow_down2 {
+    position: relative;
+    margin-right: 10px;
+    cursor: pointer;
+    background-color: rgb(183, 193, 194);
+    width: 25px;
+    border-radius: 100%;
+    text-align: center;
+    top: -2px;
+}
+
+.arrow_down2:hover {
+    opacity: 40%;
+}
+
+.arrow_down3 {
+    position: relative;
+    margin-right: 10px;
+    cursor: pointer;
+    background-color: rgb(183, 193, 194);
+    width: 25px;
+    border-radius: 100%;
+    text-align: center;
+    top: -2px;
+}
+
+.arrow_down3:hover {
+    opacity: 40%;
+}
+
+.arrow_down4 {
+    position: relative;
+    margin-right: 10px;
+    cursor: pointer;
+    background-color: rgb(183, 193, 194);
+    width: 25px;
+    border-radius: 100%;
+    text-align: center;
+    top: -2px;
+}
+
+.arrow_down4:hover {
+    opacity: 40%;
+}
+
+.arrow_down5 {
+    position: relative;
+    margin-right: 10px;
+    cursor: pointer;
+    background-color: rgb(183, 193, 194);
+    width: 25px;
+    border-radius: 100%;
+    text-align: center;
+    top: -2px;
+}
+
+.arrow_down5:hover {
+    opacity: 40%;
+}
+
+.fa-minus-circle {
+    position: relative;
+    margin-right: 7px;
+    margin-left: 47px;
+    color: rgb(255, 9, 9);
+}
+
+.fa-minus-circle:active {
+    color: rgb(207, 33, 33);
+}
+
+.fa-plus-circle {
+    position: relative;
+    margin-left: 15px;
+    color: rgb(38, 126, 17);
+}
+
+.fa-plus-circle:active {
+    color: rgb(28, 92, 12);
+}
+
+.btn-order-pad {
+    position: relative;
+    margin-right: 7px;
+    margin-left: 47px;
+    color: rgb(36, 80, 226);
+    width: 80px;
+}
+
+.legend_table {
+    font-size: 17px;
+    font-weight: 300;
+    margin-right: 10px;
+}
+
+.title_table {
+    font-size: 20px;
+    font-weight: 500;
+    position: relative;
+    bottom: 15px;
+}
+
+#mesa1 {
+    background-color: #d9e1f0;
+    padding: 15px 0;
+    border-radius: 10px;
+}
+
+.selectProducts {
+    width: 70% !important;
+}
+
+.addProduct {
+    position: relative;
+    margin-left: 20px !important;
+}
