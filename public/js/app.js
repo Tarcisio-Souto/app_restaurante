@@ -5099,6 +5099,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -5118,7 +5122,13 @@ __webpack_require__.r(__webpack_exports__);
         status: null,
         count_peoples: null,
         product: null,
-        preserveState: true
+        product_request: {
+          id: 0,
+          description: null,
+          count: null
+        },
+        index: null,
+        list: []
       }
     };
   },
@@ -5146,6 +5156,10 @@ __webpack_require__.r(__webpack_exports__);
       });
     });
   },
+  mounted: function mounted() {
+    var products = JSON.parse(localStorage.getItem("products"));
+    this.list = products ? products : [];
+  },
   methods: {
     addPeoples: function addPeoples() {
       if (this.form.count_peoples < 4) {
@@ -5156,6 +5170,31 @@ __webpack_require__.r(__webpack_exports__);
       if (this.form.count_peoples > 1) {
         this.form.count_peoples--;
       }
+    },
+    add: function add() {
+      if (this.form.product_request.id === 0) {
+        this.form.product_request.id = this.form.list.length + 1;
+        this.form.list.push(this.form.product_request);
+      } else {
+        this.form.list[this.index] = this.form.product_request;
+      }
+
+      localStorage.setItem("products", JSON.stringify(this.form.list));
+      this.form.product_request = {
+        id: 0,
+        description: null,
+        count: null
+      };
+    },
+    remove: function remove(item) {
+      var idx = this.list.indexOf(item);
+      this.list.splice(idx, 1);
+      localStorage.setItem("products", JSON.stringify(this.list));
+    },
+    edit: function edit(item) {
+      this.index = this.list.indexOf(item);
+      this.product_request = Object.assign({}, item);
+      localStorage.setItem("products", JSON.stringify(this.list));
     }
   }
 });
@@ -30468,176 +30507,223 @@ var render = function () {
                             }),
                           ]),
                           _vm._v(" "),
-                          _c("div", { staticClass: "modal-body" }, [
-                            _c("form", [
-                              _c("label", { attrs: { for: "inputProduct" } }, [
-                                _vm._v("Produtos"),
-                              ]),
-                              _vm._v(" "),
-                              _c(
-                                "div",
-                                { staticClass: "input-group selectProducts" },
-                                [
-                                  _c(
-                                    "div",
-                                    { staticClass: "input-group-prepend" },
-                                    [
-                                      _c(
-                                        "div",
-                                        { staticClass: "input-group-text" },
-                                        [
-                                          _c("i", {
-                                            staticClass:
-                                              "fas fa-light fa-plus-square",
-                                          }),
-                                        ]
-                                      ),
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "select",
-                                    {
-                                      directives: [
-                                        {
-                                          name: "model",
-                                          rawName: "v-model",
-                                          value: _vm.form.product,
-                                          expression: "form.product",
-                                        },
-                                      ],
-                                      staticClass: "form-control",
-                                      attrs: {
-                                        id: "inputProduct",
-                                        name: "txtProduct",
-                                      },
-                                      on: {
-                                        change: function ($event) {
-                                          var $$selectedVal =
-                                            Array.prototype.filter
-                                              .call(
-                                                $event.target.options,
-                                                function (o) {
-                                                  return o.selected
-                                                }
-                                              )
-                                              .map(function (o) {
-                                                var val =
-                                                  "_value" in o
-                                                    ? o._value
-                                                    : o.value
-                                                return val
-                                              })
-                                          _vm.$set(
-                                            _vm.form,
-                                            "product",
-                                            $event.target.multiple
-                                              ? $$selectedVal
-                                              : $$selectedVal[0]
-                                          )
-                                        },
-                                      },
-                                    },
-                                    [
-                                      _c(
-                                        "option",
-                                        { attrs: { selected: "" } },
-                                        [_vm._v("Selecione o produto")]
-                                      ),
-                                      _vm._v(" "),
-                                      _vm._l(_vm.products, function (product) {
-                                        return _c(
-                                          "option",
-                                          {
-                                            key: product.id,
-                                            domProps: { value: product.id },
-                                          },
-                                          [
-                                            _vm._v(
-                                              "\n                              " +
-                                                _vm._s(product.description) +
-                                                "\n                            "
-                                            ),
-                                          ]
-                                        )
-                                      }),
-                                    ],
-                                    2
-                                  ),
-                                  _vm._v(" "),
-                                  _c("i", {
-                                    staticClass:
-                                      "\n                              fas\n                              fa-2x fa-solid fa-plus-circle\n                              addProduct\n                            ",
-                                    on: {
-                                      click: function ($event) {
-                                        return _vm.addProduct($event)
-                                      },
-                                    },
-                                  }),
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c("table", { staticClass: "table" }, [
-                                _c("thead", [
-                                  _c("tr", [
-                                    _c("th", { attrs: { scope: "col" } }, [
-                                      _vm._v("#"),
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("th", { attrs: { scope: "col" } }, [
-                                      _vm._v("First"),
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("th", { attrs: { scope: "col" } }, [
-                                      _vm._v("Last"),
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("th", { attrs: { scope: "col" } }, [
-                                      _vm._v("Handle"),
-                                    ]),
-                                  ]),
-                                ]),
+                          _c(
+                            "div",
+                            { staticClass: "modal-body", attrs: { id: "app" } },
+                            [
+                              _c("form", [
+                                _c(
+                                  "label",
+                                  { attrs: { for: "inputProduct" } },
+                                  [_vm._v("Produtos")]
+                                ),
                                 _vm._v(" "),
-                                _c("tbody", [
-                                  _c("tr", [
-                                    _c("th", { attrs: { scope: "row" } }, [
-                                      _vm._v("1"),
+                                _c(
+                                  "div",
+                                  { staticClass: "input-group selectProducts" },
+                                  [
+                                    _c(
+                                      "div",
+                                      { staticClass: "input-group-prepend" },
+                                      [
+                                        _c(
+                                          "div",
+                                          { staticClass: "input-group-text" },
+                                          [
+                                            _c("i", {
+                                              staticClass:
+                                                "fas fa-light fa-plus-square",
+                                            }),
+                                          ]
+                                        ),
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "select",
+                                      {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value:
+                                              _vm.form.product_request
+                                                .description,
+                                            expression:
+                                              "form.product_request.description",
+                                          },
+                                        ],
+                                        staticClass: "form-control",
+                                        attrs: {
+                                          id: "inputProduct",
+                                          name: "txtProduct",
+                                        },
+                                        on: {
+                                          change: function ($event) {
+                                            var $$selectedVal =
+                                              Array.prototype.filter
+                                                .call(
+                                                  $event.target.options,
+                                                  function (o) {
+                                                    return o.selected
+                                                  }
+                                                )
+                                                .map(function (o) {
+                                                  var val =
+                                                    "_value" in o
+                                                      ? o._value
+                                                      : o.value
+                                                  return val
+                                                })
+                                            _vm.$set(
+                                              _vm.form.product_request,
+                                              "description",
+                                              $event.target.multiple
+                                                ? $$selectedVal
+                                                : $$selectedVal[0]
+                                            )
+                                          },
+                                        },
+                                      },
+                                      [
+                                        _c(
+                                          "option",
+                                          { attrs: { selected: "" } },
+                                          [_vm._v("Selecione o produto")]
+                                        ),
+                                        _vm._v(" "),
+                                        _vm._l(_vm.products, function (item) {
+                                          return _c(
+                                            "option",
+                                            {
+                                              key: item.id,
+                                              domProps: { value: item.id },
+                                            },
+                                            [
+                                              _vm._v(
+                                                "\n                              " +
+                                                  _vm._s(item.description) +
+                                                  "\n                            "
+                                              ),
+                                            ]
+                                          )
+                                        }),
+                                      ],
+                                      2
+                                    ),
+                                    _vm._v(" "),
+                                    _c("i", {
+                                      staticClass:
+                                        "\n                              fas\n                              fa-2x fa-solid fa-plus-circle\n                              addProduct\n                            ",
+                                      on: {
+                                        click: function ($event) {
+                                          return _vm.add()
+                                        },
+                                      },
+                                    }),
+                                    _vm._v(" "),
+                                    _c("table", { staticClass: "table" }, [
+                                      _c("thead", [
+                                        _c("tr", [
+                                          _c(
+                                            "th",
+                                            { attrs: { scope: "col" } },
+                                            [_vm._v("#")]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "th",
+                                            { attrs: { scope: "col" } },
+                                            [_vm._v("Produto")]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "th",
+                                            { attrs: { scope: "col" } },
+                                            [_vm._v("Quantidade")]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "th",
+                                            { attrs: { scope: "col" } },
+                                            [_vm._v("Ação")]
+                                          ),
+                                        ]),
+                                      ]),
+                                      _vm._v(" "),
+                                      _c(
+                                        "tbody",
+                                        _vm._l(_vm.form.list, function (item) {
+                                          return _c(
+                                            "tr",
+                                            {
+                                              key: item.id,
+                                              attrs: { value: item.id },
+                                            },
+                                            [
+                                              _c(
+                                                "th",
+                                                { attrs: { scope: "row" } },
+                                                [_vm._v(_vm._s(item.id))]
+                                              ),
+                                              _vm._v(" "),
+                                              _c("td", [
+                                                _vm._v(
+                                                  _vm._s(item.description)
+                                                ),
+                                              ]),
+                                              _vm._v(" "),
+                                              _c("td", [
+                                                _vm._v(_vm._s(item.count)),
+                                              ]),
+                                              _vm._v(" "),
+                                              _c("td", [
+                                                _c(
+                                                  "button",
+                                                  {
+                                                    staticClass: "btn btn-info",
+                                                    on: {
+                                                      click: function ($event) {
+                                                        return _vm.edit(item)
+                                                      },
+                                                    },
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "\n                                    Editar\n                                  "
+                                                    ),
+                                                  ]
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "button",
+                                                  {
+                                                    staticClass:
+                                                      "btn btn-danger",
+                                                    on: {
+                                                      click: function ($event) {
+                                                        return _vm.remove(item)
+                                                      },
+                                                    },
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "\n                                    Excluir\n                                  "
+                                                    ),
+                                                  ]
+                                                ),
+                                              ]),
+                                            ]
+                                          )
+                                        }),
+                                        0
+                                      ),
                                     ]),
-                                    _vm._v(" "),
-                                    _c("td", [_vm._v("Mark")]),
-                                    _vm._v(" "),
-                                    _c("td", [_vm._v("Otto")]),
-                                    _vm._v(" "),
-                                    _c("td", [_vm._v("@mdo")]),
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("tr", [
-                                    _c("th", { attrs: { scope: "row" } }, [
-                                      _vm._v("2"),
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("td", [_vm._v("Jacob")]),
-                                    _vm._v(" "),
-                                    _c("td", [_vm._v("Thornton")]),
-                                    _vm._v(" "),
-                                    _c("td", [_vm._v("@fat")]),
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("tr", [
-                                    _c("th", { attrs: { scope: "row" } }, [
-                                      _vm._v("3"),
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("td", { attrs: { colspan: "2" } }, [
-                                      _vm._v("Larry the Bird"),
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("td", [_vm._v("@twitter")]),
-                                  ]),
-                                ]),
+                                  ]
+                                ),
                               ]),
-                            ]),
-                          ]),
+                            ]
+                          ),
                           _vm._v(" "),
                           _c("div", { staticClass: "modal-footer" }, [
                             _c(

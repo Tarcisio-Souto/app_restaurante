@@ -105,7 +105,7 @@
                           aria-label="Close"
                         ></button>
                       </div>
-                      <div class="modal-body">
+                      <div class="modal-body" id="app">
                         <form>
                           <label for="inputProduct">Produtos</label>
                           <div class="input-group selectProducts">
@@ -117,16 +117,16 @@
                             <select
                               id="inputProduct"
                               class="form-control"
-                              v-model="form.product"
+                              v-model="form.product_request.description"
                               name="txtProduct"
                             >
                               <option selected>Selecione o produto</option>
                               <option
-                                v-for="product in products"
-                                :key="product.id"
-                                :value="product.id"
+                                v-for="item in products"
+                                :key="item.id"
+                                :value="item.id"
                               >
-                                {{ product.description }}
+                                {{ item.description }}
                               </option>
                             </select>
                             <i
@@ -135,41 +135,45 @@
                                 fa-2x fa-solid fa-plus-circle
                                 addProduct
                               "
-                              @click="addProduct($event)"
+                              @click="add()"
                             ></i>
+
+                            <table class="table">
+                              <thead>
+                                <tr>
+                                  <th scope="col">#</th>
+                                  <th scope="col">Produto</th>
+                                  <th scope="col">Quantidade</th>
+                                  <th scope="col">Ação</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr
+                                  v-for="item in form.list"
+                                  :key="item.id"
+                                  :value="item.id"
+                                >
+                                  <th scope="row">{{ item.id }}</th>
+                                  <td>{{ item.description }}</td>
+                                  <td>{{ item.count }}</td>
+                                  <td>
+                                    <button
+                                      @click="edit(item)"
+                                      class="btn btn-info"
+                                    >
+                                      Editar
+                                    </button>
+                                    <button
+                                      @click="remove(item)"
+                                      class="btn btn-danger"
+                                    >
+                                      Excluir
+                                    </button>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
                           </div>
-
-                          <table class="table">
-                            <thead>
-                              <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">First</th>
-                                <th scope="col">Last</th>
-                                <th scope="col">Handle</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                              </tr>
-                              <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                              </tr>
-                              <tr>
-                                <th scope="row">3</th>
-                                <td colspan="2">Larry the Bird</td>
-                                <td>@twitter</td>
-                              </tr>
-                            </tbody>
-                          </table>
-
-                          
                         </form>
                       </div>
                       <div class="modal-footer">
@@ -280,7 +284,13 @@ export default {
         status: null,
         count_peoples: null,
         product: null,
-        preserveState: true,
+        product_request: {
+          id: 0,
+          description: null,
+          count: null,
+        },
+        index: null,
+        list: [],
       },
     };
   },
@@ -314,6 +324,11 @@ export default {
     });
   },
 
+  mounted() {
+    const products = JSON.parse(localStorage.getItem("products"));
+    this.list = products ? products : [];
+  },
+
   methods: {
     addPeoples: function () {
       if (this.form.count_peoples < 4) {
@@ -325,6 +340,29 @@ export default {
       if (this.form.count_peoples > 1) {
         this.form.count_peoples--;
       }
+    },
+
+    add() {
+      if (this.form.product_request.id === 0) {
+        this.form.product_request.id = this.form.list.length + 1;
+        this.form.list.push(this.form.product_request);
+      } else {
+        this.form.list[this.index] = this.form.product_request;
+      }
+      localStorage.setItem("products", JSON.stringify(this.form.list));
+      this.form.product_request = { id: 0, description: null, count: null };
+    },
+
+    remove(item) {
+      const idx = this.list.indexOf(item);
+      this.list.splice(idx, 1);
+      localStorage.setItem("products", JSON.stringify(this.list));
+    },
+
+    edit(item) {
+      this.index = this.list.indexOf(item);
+      this.product_request = Object.assign({}, item);
+      localStorage.setItem("products", JSON.stringify(this.list));
     },
   },
 };
