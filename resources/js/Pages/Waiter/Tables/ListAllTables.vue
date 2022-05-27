@@ -117,76 +117,75 @@
                             <select
                               id="inputProduct"
                               class="form-control"
-                              v-model="form.product_request.description"
+                              v-model="form.aux"
                               name="txtProduct"
                             >
                               <option selected>Selecione o produto</option>
                               <option
                                 v-for="item in products"
                                 :key="item.id"
-                                :value="item.id"
+                                :value="[item.id, item.description, item.price]"
                               >
                                 {{ item.description }}
                               </option>
                             </select>
                             <i
-                              class="
-                                fas
-                                fa-2x fa-solid fa-plus-circle
-                                addProduct
-                              "
+                              class="fas fa-2x fa-solid fa-cart-plus addProduct"
                               @click="add()"
                             ></i>
 
                             <table class="table">
                               <thead>
                                 <tr>
-                                  <th scope="col">#</th>
                                   <th scope="col">Produto</th>
                                   <th scope="col">Quantidade</th>
-                                  <th scope="col">Ação</th>
+                                  <th scope="col">Preço UN</th>
+                                  <th scope="col">Preço Total</th>
+                                  <th scope="col" align="center">Ação</th>
                                 </tr>
                               </thead>
                               <tbody>
                                 <tr
-                                  v-for="item in form.list"
+                                  v-for="item in this.form.list"
                                   :key="item.id"
                                   :value="item.id"
                                 >
-                                  <th scope="row">{{ item.id }}</th>
                                   <td>{{ item.description }}</td>
                                   <td>{{ item.count }}</td>
+                                  <td>{{ item.price_unit }}</td>
+                                  <td>{{ item.total_price }}</td>
                                   <td>
-                                    <button
-                                      @click="edit(item)"
-                                      class="btn btn-info"
-                                    >
-                                      Editar
-                                    </button>
-                                    <button
+                                    <i
+                                      class="fas fa-solid fa-minus-circle"
+                                      @click="minusCountProd(item)"
+                                    ></i>
+                                    <i
+                                      class="fas fa-solid fa-plus-circle"
+                                      @click="addCountProd(item)"
+                                    ></i>
+                                    <i
+                                      class="fas fa-solid fa-trash"
                                       @click="remove(item)"
-                                      class="btn btn-danger"
-                                    >
-                                      Excluir
-                                    </button>
+                                    ></i>
                                   </td>
                                 </tr>
                               </tbody>
                             </table>
                           </div>
+                          <div class="modal-footer">
+                            <h4 class="total_order_pad">Total: </h4><span>{{ this.form.total_order_pad }}</span>
+                            <button
+                              type="button"
+                              class="btn btn-secondary"
+                              data-bs-dismiss="modal"
+                            >
+                              Calcular
+                            </button>
+                            <button type="button" class="btn btn-primary">
+                              Pagar
+                            </button>
+                          </div>
                         </form>
-                      </div>
-                      <div class="modal-footer">
-                        <button
-                          type="button"
-                          class="btn btn-secondary"
-                          data-bs-dismiss="modal"
-                        >
-                          Close
-                        </button>
-                        <button type="button" class="btn btn-primary">
-                          Send message
-                        </button>
                       </div>
                     </div>
                   </div>
@@ -283,11 +282,15 @@ export default {
         number: null,
         status: null,
         count_peoples: null,
+        total_order_pad: null,
         product: null,
+        aux: null,
         product_request: {
           id: 0,
           description: null,
           count: null,
+          price_unit: null,
+          total_price: null
         },
         index: null,
         list: [],
@@ -325,11 +328,12 @@ export default {
   },
 
   mounted() {
-    const products = JSON.parse(localStorage.getItem("products"));
-    this.list = products ? products : [];
+    const product_request = JSON.parse(localStorage.getItem("product_request"));
+    this.list = product_request ? product_request : [];
   },
 
   methods: {
+
     addPeoples: function () {
       if (this.form.count_peoples < 4) {
         this.form.count_peoples++;
@@ -342,28 +346,51 @@ export default {
       }
     },
 
+
+    addCountProd: function (item) {
+      if (this.form.product_request.count < 4) {        
+        
+        this.form.index = this.form.list.indexOf(item)
+        this.form.product_request = Object.assign({}, item)
+        this.form.product_request.count++
+
+
+        this.form.product_request.total_price = (this.form.product_request.price_unit * this.form.product_request.count)
+        this.form.list[this.form.index] = this.form.product_request;       
+
+      }
+    },
+
+    minusCountProd: function (item) {
+      if (this.form.product_request.count > 1) {
+        this.form.index = this.form.list.indexOf(item)
+        this.form.product_request = Object.assign({}, item)
+        this.form.product_request.count--
+        this.form.list[this.form.index] = this.form.product_request;
+      }
+    },
+
+
+
     add() {
       if (this.form.product_request.id === 0) {
         this.form.product_request.id = this.form.list.length + 1;
+        this.form.product_request.id = this.form.aux[0]
+        this.form.product_request.description = this.form.aux[1]
+        this.form.product_request.price_unit = this.form.aux[2]
         this.form.list.push(this.form.product_request);
-      } else {
-        this.form.list[this.index] = this.form.product_request;
       }
-      localStorage.setItem("products", JSON.stringify(this.form.list));
-      this.form.product_request = { id: 0, description: null, count: null };
+
+      this.form.product_request = { id: 0, description: null, count: null, price: null };
+
     },
 
     remove(item) {
       const idx = this.list.indexOf(item);
       this.list.splice(idx, 1);
-      localStorage.setItem("products", JSON.stringify(this.list));
+      localStorage.setItem("product_request", JSON.stringify(this.list));
     },
 
-    edit(item) {
-      this.index = this.list.indexOf(item);
-      this.product_request = Object.assign({}, item);
-      localStorage.setItem("products", JSON.stringify(this.list));
-    },
   },
 };
 </script>

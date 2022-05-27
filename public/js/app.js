@@ -5102,7 +5102,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -5121,11 +5120,15 @@ __webpack_require__.r(__webpack_exports__);
         number: null,
         status: null,
         count_peoples: null,
+        total_order_pad: null,
         product: null,
+        aux: null,
         product_request: {
           id: 0,
           description: null,
-          count: null
+          count: null,
+          price_unit: null,
+          total_price: null
         },
         index: null,
         list: []
@@ -5157,8 +5160,8 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   mounted: function mounted() {
-    var products = JSON.parse(localStorage.getItem("products"));
-    this.list = products ? products : [];
+    var product_request = JSON.parse(localStorage.getItem("product_request"));
+    this.list = product_request ? product_request : [];
   },
   methods: {
     addPeoples: function addPeoples() {
@@ -5171,30 +5174,43 @@ __webpack_require__.r(__webpack_exports__);
         this.form.count_peoples--;
       }
     },
+    addCountProd: function addCountProd(item) {
+      if (this.form.product_request.count < 4) {
+        this.form.index = this.form.list.indexOf(item);
+        this.form.product_request = Object.assign({}, item);
+        this.form.product_request.count++;
+        this.form.product_request.total_price = this.form.product_request.price_unit * this.form.product_request.count;
+        this.form.list[this.form.index] = this.form.product_request;
+      }
+    },
+    minusCountProd: function minusCountProd(item) {
+      if (this.form.product_request.count > 1) {
+        this.form.index = this.form.list.indexOf(item);
+        this.form.product_request = Object.assign({}, item);
+        this.form.product_request.count--;
+        this.form.list[this.form.index] = this.form.product_request;
+      }
+    },
     add: function add() {
       if (this.form.product_request.id === 0) {
         this.form.product_request.id = this.form.list.length + 1;
+        this.form.product_request.id = this.form.aux[0];
+        this.form.product_request.description = this.form.aux[1];
+        this.form.product_request.price_unit = this.form.aux[2];
         this.form.list.push(this.form.product_request);
-      } else {
-        this.form.list[this.index] = this.form.product_request;
       }
 
-      localStorage.setItem("products", JSON.stringify(this.form.list));
       this.form.product_request = {
         id: 0,
         description: null,
-        count: null
+        count: null,
+        price: null
       };
     },
     remove: function remove(item) {
       var idx = this.list.indexOf(item);
       this.list.splice(idx, 1);
-      localStorage.setItem("products", JSON.stringify(this.list));
-    },
-    edit: function edit(item) {
-      this.index = this.list.indexOf(item);
-      this.product_request = Object.assign({}, item);
-      localStorage.setItem("products", JSON.stringify(this.list));
+      localStorage.setItem("product_request", JSON.stringify(this.list));
     }
   }
 });
@@ -30546,11 +30562,8 @@ var render = function () {
                                           {
                                             name: "model",
                                             rawName: "v-model",
-                                            value:
-                                              _vm.form.product_request
-                                                .description,
-                                            expression:
-                                              "form.product_request.description",
+                                            value: _vm.form.aux,
+                                            expression: "form.aux",
                                           },
                                         ],
                                         staticClass: "form-control",
@@ -30576,8 +30589,8 @@ var render = function () {
                                                   return val
                                                 })
                                             _vm.$set(
-                                              _vm.form.product_request,
-                                              "description",
+                                              _vm.form,
+                                              "aux",
                                               $event.target.multiple
                                                 ? $$selectedVal
                                                 : $$selectedVal[0]
@@ -30597,7 +30610,13 @@ var render = function () {
                                             "option",
                                             {
                                               key: item.id,
-                                              domProps: { value: item.id },
+                                              domProps: {
+                                                value: [
+                                                  item.id,
+                                                  item.description,
+                                                  item.price,
+                                                ],
+                                              },
                                             },
                                             [
                                               _vm._v(
@@ -30614,7 +30633,7 @@ var render = function () {
                                     _vm._v(" "),
                                     _c("i", {
                                       staticClass:
-                                        "\n                              fas\n                              fa-2x fa-solid fa-plus-circle\n                              addProduct\n                            ",
+                                        "fas fa-2x fa-solid fa-cart-plus addProduct",
                                       on: {
                                         click: function ($event) {
                                           return _vm.add()
@@ -30625,12 +30644,6 @@ var render = function () {
                                     _c("table", { staticClass: "table" }, [
                                       _c("thead", [
                                         _c("tr", [
-                                          _c(
-                                            "th",
-                                            { attrs: { scope: "col" } },
-                                            [_vm._v("#")]
-                                          ),
-                                          _vm._v(" "),
                                           _c(
                                             "th",
                                             { attrs: { scope: "col" } },
@@ -30646,6 +30659,23 @@ var render = function () {
                                           _c(
                                             "th",
                                             { attrs: { scope: "col" } },
+                                            [_vm._v("Preço UN")]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "th",
+                                            { attrs: { scope: "col" } },
+                                            [_vm._v("Preço Total")]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "th",
+                                            {
+                                              attrs: {
+                                                scope: "col",
+                                                align: "center",
+                                              },
+                                            },
                                             [_vm._v("Ação")]
                                           ),
                                         ]),
@@ -30653,7 +30683,7 @@ var render = function () {
                                       _vm._v(" "),
                                       _c(
                                         "tbody",
-                                        _vm._l(_vm.form.list, function (item) {
+                                        _vm._l(this.form.list, function (item) {
                                           return _c(
                                             "tr",
                                             {
@@ -30661,12 +30691,6 @@ var render = function () {
                                               attrs: { value: item.id },
                                             },
                                             [
-                                              _c(
-                                                "th",
-                                                { attrs: { scope: "row" } },
-                                                [_vm._v(_vm._s(item.id))]
-                                              ),
-                                              _vm._v(" "),
                                               _c("td", [
                                                 _vm._v(
                                                   _vm._s(item.description)
@@ -30678,40 +30702,49 @@ var render = function () {
                                               ]),
                                               _vm._v(" "),
                                               _c("td", [
-                                                _c(
-                                                  "button",
-                                                  {
-                                                    staticClass: "btn btn-info",
-                                                    on: {
-                                                      click: function ($event) {
-                                                        return _vm.edit(item)
-                                                      },
+                                                _vm._v(_vm._s(item.price_unit)),
+                                              ]),
+                                              _vm._v(" "),
+                                              _c("td", [
+                                                _vm._v(
+                                                  _vm._s(item.total_price)
+                                                ),
+                                              ]),
+                                              _vm._v(" "),
+                                              _c("td", [
+                                                _c("i", {
+                                                  staticClass:
+                                                    "fas fa-solid fa-minus-circle",
+                                                  on: {
+                                                    click: function ($event) {
+                                                      return _vm.minusCountProd(
+                                                        item
+                                                      )
                                                     },
                                                   },
-                                                  [
-                                                    _vm._v(
-                                                      "\n                                    Editar\n                                  "
-                                                    ),
-                                                  ]
-                                                ),
+                                                }),
                                                 _vm._v(" "),
-                                                _c(
-                                                  "button",
-                                                  {
-                                                    staticClass:
-                                                      "btn btn-danger",
-                                                    on: {
-                                                      click: function ($event) {
-                                                        return _vm.remove(item)
-                                                      },
+                                                _c("i", {
+                                                  staticClass:
+                                                    "fas fa-solid fa-plus-circle",
+                                                  on: {
+                                                    click: function ($event) {
+                                                      return _vm.addCountProd(
+                                                        item
+                                                      )
                                                     },
                                                   },
-                                                  [
-                                                    _vm._v(
-                                                      "\n                                    Excluir\n                                  "
-                                                    ),
-                                                  ]
-                                                ),
+                                                }),
+                                                _vm._v(" "),
+                                                _c("i", {
+                                                  staticClass:
+                                                    "fas fa-solid fa-trash",
+                                                  on: {
+                                                    click: function ($event) {
+                                                      return _vm.remove(item)
+                                                    },
+                                                  },
+                                                }),
                                               ]),
                                             ]
                                           )
@@ -30721,40 +30754,47 @@ var render = function () {
                                     ]),
                                   ]
                                 ),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "modal-footer" }, [
+                                  _c("h4", { staticClass: "total_order_pad" }, [
+                                    _vm._v("Total: "),
+                                  ]),
+                                  _c("span", [
+                                    _vm._v(_vm._s(this.form.total_order_pad)),
+                                  ]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-secondary",
+                                      attrs: {
+                                        type: "button",
+                                        "data-bs-dismiss": "modal",
+                                      },
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                            Calcular\n                          "
+                                      ),
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-primary",
+                                      attrs: { type: "button" },
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                            Pagar\n                          "
+                                      ),
+                                    ]
+                                  ),
+                                ]),
                               ]),
                             ]
                           ),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "modal-footer" }, [
-                            _c(
-                              "button",
-                              {
-                                staticClass: "btn btn-secondary",
-                                attrs: {
-                                  type: "button",
-                                  "data-bs-dismiss": "modal",
-                                },
-                              },
-                              [
-                                _vm._v(
-                                  "\n                        Close\n                      "
-                                ),
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "button",
-                              {
-                                staticClass: "btn btn-primary",
-                                attrs: { type: "button" },
-                              },
-                              [
-                                _vm._v(
-                                  "\n                        Send message\n                      "
-                                ),
-                              ]
-                            ),
-                          ]),
                         ]),
                       ]
                     ),
